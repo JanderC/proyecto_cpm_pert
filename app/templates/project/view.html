@@ -1,0 +1,40 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h2>Proyecto: {{ project.name }}</h2>
+<p>{{ project.description }}</p>
+
+<hr>
+
+<h3>Tareas</h3>
+<ul class="list-group">
+    {% for task in tasks %}
+    <li class="list-group-item">
+        <strong>{{ task.name }}</strong><br>
+        <small>{{ task.description }}</small><br>
+
+        {% set deps = task.dependencies.all() %}
+        {% if deps %}
+        <small><strong>Depende de:</strong>
+            {% for dep in deps %}
+                {{ dep.dependency.name }}{% if not loop.last %}, {% endif %}
+            {% endfor %}
+        </small><br>
+        {% endif %}
+
+        <a href="{{ url_for('projects.edit_task', task_id=task.id) }}" class="btn btn-sm btn-primary mt-2">Editar</a>
+        <form method="POST" action="{{ url_for('projects.delete_task', task_id=task.id) }}" style="display: inline;">
+            <button type="submit" class="btn btn-sm btn-danger mt-2">Eliminar</button>
+        </form>
+    </li>
+    {% endfor %}
+</ul>
+
+<a href="{{ url_for('projects.create_task', project_id=project.id) }}" class="btn btn-success mt-4">+ Nueva tarea</a>
+
+<hr>
+
+<a href="{{ url_for('projects.gantt', project_id=project.id) }}" class="btn btn-outline-info">📊 Ver Gantt</a>
+<a href="{{ url_for('projects.analyze', project_id=project.id) }}" class="btn btn-outline-secondary">📈 Analizar CPM/PERT</a>
+
+{% endblock %}

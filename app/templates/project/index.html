@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <h1>Proyectos</h1>
+
+    <div class="mb-3">
+        <a href="{{ url_for('projects.create') }}" class="btn btn-primary">Crear Proyecto</a>
+    </div>
+
+    <ul class="list-group">
+        {% for project in projects %}
+            <li class="list-group-item">
+                <a href="{{ url_for('projects.view', project_id=project.id) }}">{{ project.name }}</a>
+                <span class="badge badge-secondary">{{ project.description }}</span>
+            </li>
+        {% else %}
+            <li class="list-group-item">No tienes proyectos.</li>
+        {% endfor %}
+    </ul>
+{% endblock %}

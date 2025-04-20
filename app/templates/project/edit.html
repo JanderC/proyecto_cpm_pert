@@ -1,0 +1,72 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <h1>Editar Tarea: {{ task.name }}</h1>
+
+    <form method="POST">
+        <div class="form-group">
+            <label for="name">Nombre de la Tarea</label>
+            <input type="text" id="name" name="name" class="form-control" value="{{ task.name }}" required>
+        </div>
+    
+        <div class="form-group">
+            <label for="description">Descripción</label>
+            <textarea id="description" name="description" class="form-control">{{ task.description }}</textarea>
+        </div>
+    
+        <div class="form-group">
+            <label for="duration">Duración</label>
+            <input type="number" id="duration" name="duration" class="form-control" value="{{ task.duration }}" data-toggle="tooltip" data-placement="top" title="Ingrese la duración estimada de la tarea en días o horas.">
+        </div>
+    
+        <!-- Campos de CPM con tooltips -->
+        <div class="form-group">
+            <label for="early_start">Inicio Temprano</label>
+            <input type="number" id="early_start" name="early_start" class="form-control" value="{{ task.early_start }}" data-toggle="tooltip" data-placement="top" title="El primer día en el que la tarea puede comenzar sin retrasar el proyecto.">
+        </div>
+    
+        <div class="form-group">
+            <label for="early_finish">Fin Temprano</label>
+            <input type="number" id="early_finish" name="early_finish" class="form-control" value="{{ task.early_finish }}" data-toggle="tooltip" data-placement="top" title="El primer día en que la tarea debe finalizar para no retrasar otras tareas.">
+        </div>
+    
+        <div class="form-group">
+            <label for="late_start">Inicio Tardío</label>
+            <input type="number" id="late_start" name="late_start" class="form-control" value="{{ task.late_start }}" data-toggle="tooltip" data-placement="top" title="El último día en que la tarea puede comenzar sin retrasar el proyecto.">
+        </div>
+    
+        <div class="form-group">
+            <label for="late_finish">Fin Tardío</label>
+            <input type="number" id="late_finish" name="late_finish" class="form-control" value="{{ task.late_finish }}" data-toggle="tooltip" data-placement="top" title="El último día en que la tarea puede finalizar sin afectar el proyecto.">
+        </div>
+    
+        <div class="form-group">
+            <label for="slack">Holgura</label>
+            <input type="number" id="slack" name="slack" class="form-control" value="{{ task.slack }}" data-toggle="tooltip" data-placement="top" title="El tiempo adicional disponible para completar la tarea sin afectar el proyecto.">
+        </div>
+    
+        <!-- Dependencias -->
+        <div class="form-group">
+            <label for="dependencies">Dependencias</label>
+            <select name="dependencies" class="form-control" multiple>
+                {% for dep_task in tasks %}
+                    <option value="{{ dep_task.id }}" {% if dep_task.id in current_dependencies %} selected {% endif %}>
+                        {{ dep_task.name }}
+                    </option>
+                {% endfor %}
+            </select>
+        </div>
+    
+        <button type="submit" class="btn btn-primary">Actualizar Tarea</button>
+    </form>
+    
+    <!-- Agregar el código JavaScript necesario para activar los tooltips -->
+    <script>
+        // Activar tooltips
+        $(document).ready(function(){
+            $('[data-toggle="tooltip"]').tooltip();
+        });
+    </script>
+    
+    
+{% endblock %}

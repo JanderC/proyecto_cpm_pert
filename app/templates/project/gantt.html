@@ -1,0 +1,34 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container mt-4">
+    <h2>Diagrama Gantt simplificado - Proyecto: {{ project.name }}</h2>
+
+    <a href="{{ url_for('projects.index') }}" class="btn btn-secondary my-3">← Volver a proyectos</a>
+
+    <table class="table table-bordered table-striped">
+        <thead class="table-light">
+            <tr>
+                <th>Tarea</th>
+                <th>Inicio</th>
+                <th>Fin</th>
+                <th>Duración (días)</th>
+                <th>Dependencias</th>
+                <th>Crítica</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for task in gantt_data %}
+                <tr class="{% if task.is_critical %}table-danger{% endif %}">
+                    <td>{{ task.name }}</td>
+                    <td>{{ task.start }}</td>
+                    <td>{{ task.end }}</td>
+                    <td>{{ task.duration }}</td>
+                    <td>{{ task.dependencies }}</td>
+                    <td>{{ 'Sí' if task.is_critical else 'No' }}</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

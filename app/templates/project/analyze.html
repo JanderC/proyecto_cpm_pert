@@ -1,0 +1,49 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h2>Análisis del Proyecto: {{ project.name }}</h2>
+
+<hr>
+<h4>🔁 CPM - Camino Crítico</h4>
+<p><strong>Duración total del proyecto:</strong> {{ project_duration }} unidades</p>
+<p><strong>Camino crítico:</strong> {{ critical_path|join(' → ') }}</p>
+
+<hr>
+<h4>📊 PERT</h4>
+<p><strong>Duración esperada:</strong> {{ "%.2f"|format(pert_duration) }}</p>
+<p><strong>Varianza:</strong> {{ "%.2f"|format(pert_variance) }}</p>
+<p><strong>Desviación estándar:</strong> {{ "%.2f"|format(pert_std_dev) }}</p>
+
+<hr>
+<h4>📋 Detalle de Tareas</h4>
+
+<table class="table table-bordered table-striped">
+    <thead>
+        <tr>
+            <th>Nombre</th>
+            <th>Inicio Temprano</th>
+            <th>Fin Temprano</th>
+            <th>Inicio Tardío</th>
+            <th>Fin Tardío</th>
+            <th>Holgura</th>
+            <th>Crítica</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for task in tasks %}
+        <tr class="{% if task.is_critical %}table-danger{% endif %}">
+            <td>{{ task.name }}</td>
+            <td>{{ task.early_start }}</td>
+            <td>{{ task.early_finish }}</td>
+            <td>{{ task.late_start }}</td>
+            <td>{{ task.late_finish }}</td>
+            <td>{{ task.slack }}</td>
+            <td>{{ '✅ Sí' if task.is_critical else '❌ No' }}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+<a href="{{ url_for('projects.view', project_id=project.id) }}" class="btn btn-secondary mt-3">⬅️ Volver al proyecto</a>
+
+{% endblock %}
